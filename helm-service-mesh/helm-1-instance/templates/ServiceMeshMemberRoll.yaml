@@ -1,0 +1,7 @@
+apiVersion: maistra.io/v1
+kind: ServiceMeshMemberRoll
+metadata:
+  namespace: projeto-infra-ossm
+  name: default
+spec:
+  members:

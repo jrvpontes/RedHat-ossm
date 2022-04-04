@@ -1,0 +1,15 @@
+serviceMesh:
+  namespace:
+    name: projeto-infra-ossm
+  controlPlane:
+    name: basic
+    addons:
+      grafana:
+        enabled: true
+      kiali:
+        enabled: true
+      prometheus:
+        enabled: true
+    version: v2.1
+
+  memberRoll:

@@ -1,0 +1,70 @@
+- Service mesh
+    - oc new-project projeto-infra-ossm
+    instalar service-mesh
+        - OpenShift Elasticsearch Operator - provided by Red Hat
+        - Community Jaeger Operator - provided by CNCF
+        - Kiali Operator - provided by Red Hat
+        - Red Hat OpenShift Service Mesh - provided by Red Hat
+
+oc -n openshift-operators get subs
+    jaeger                jaeger                community-operators   stable
+    kiali-ossm            kiali-ossm            redhat-operators      stable
+    servicemeshoperator   servicemeshoperator   redhat-operators      stable
+
+    oc -n openshift-operators get subs/jaeger -o yaml > cfg/subs-jaeger.yaml
+    oc -n openshift-operators get subs/kiali-ossm -o yaml > cfg/subs-kiali.yaml
+    oc -n openshift-operators get subs/servicemeshoperator -o yaml > cfg/subs-servicemesh.yaml
+
+
+
+    
+oc -n openshift-operators-redhat get subs
+    elasticsearch-operator   elasticsearch-operator   redhat-operators   stable-5.2
+
+    oc -n openshift-operators-redhat get subs/elasticsearch-operator -o yaml > cfg/subs-elasticsearch.yaml
+
+
+    configurar service-mesh
+        - control-plane
+        - member-roll
+            - sem membros
+
+- aplicações
+    - oc new-project projeto-apps
+    - oc annotate ns projeto-apps istio-injection=enabled
+    - ajustar projeto-infra-ossm >> Member Roll >> Spec >> Members [projeto-apps]
+    - oc create -f order-deploy.yaml
+    - oc create -f product-deploy.yaml
+    - oc new-app --name=sonda registry.access.redhat.com/ubi8/ubi-minimal:8.5
+
+- aplicar configurações istio:
+    - oc create -f /cfg/0_istio-gateway.yaml
+    - oc create -f /cfg/1_istio-virtual-service.yaml
+- testar pods
+- sondar projetos # opcional
+    - oc rsh pods/sonda-1-deploy /bin/bash
+        - curl order:8080/order
+        - curl product:8080/spl50
+
+
+- acessar routes
+        
+
+
+
+helm install -f values.yaml basic  . --dry-run
+helm install -f values.yaml ossm-operators --namespace=projeto-infra-ossm --create-namespace . --dry-run
+helm install -f values.yaml ossm-instances . --dry-run
+
+
+durante a instalação via helm, metadata.name e metadata.namespace não foram respeitados.
+No caso do kiali e jaeger, a instalação não saiu do estado de pending.
+
+
+oc -n projeto-infra-ossm patch servicemeshmemberroll/default --type=merge -p '{"spec": {"members": ["projeto-apps"]}}'
+
+
+
+
+oc delete project projeto-apps
+oc delete project projeto-infra-ossm

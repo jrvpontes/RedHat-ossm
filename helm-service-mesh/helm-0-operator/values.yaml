@@ -1,0 +1,6 @@
+serviceMesh:
+  namespace:
+    name: service-mesh
+  subscription:
+    name: servicemeshoperator
+    channel: stable
