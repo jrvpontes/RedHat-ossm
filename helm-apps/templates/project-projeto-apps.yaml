@@ -1,0 +1,13 @@
+kind: Project
+apiVersion: project.openshift.io/v1
+metadata:
+  name: projeto-apps
+  labels:
+    maistra.io/member-of: projeto-infra-ossm
+  annotations:
+    istio-injection: enabled
+    openshift.io/description: ''
+    openshift.io/display-name: ''
+spec:
+  finalizers:
+    - kubernetes
