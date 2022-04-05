@@ -1,0 +1,47 @@
+################################################################################
+#pré requisitos
+################################################################################
+- git client
+    - clone https://github.com/jrvpontes/RedHat-proderj
+- helm client
+    - https://helm.sh/docs/intro/install/
+- oc client
+    - https://docs.openshift.com/container-platform/4.7/cli_reference/openshift_cli/getting-started-cli.html
+--------------------------------------------------------------------------------
+################################################################################
+
+
+oc new-project projeto-infra-ossm
+helm install -f values.yaml ossm-operators . --dry-run
+helm install -f values.yaml ossm-instances . --dry-run
+helm install -f values.yaml ossm-apps --namespace=projeto-apps --create-namespace . --dry-run
+    - não respeitou a anotação: istio-injection=enabled
+    - aplicar manualmente: oc -ns=projeto-apps annotate istio-injection=enabled
+
+oc -ns=projeto-infra-ossm patch servicemeshmemberroll/default --type=merge -p '{"spec": {"members": ["projeto-apps"]}}'
+
+oc delete project projeto-apps
+oc delete project projeto-infra-ossm
+--------------------------------------------------------------------------------
+################################################################################
+
+
+################################################################################
+#comprometeu com o cluster TODO. Os operatos não saem do lugar: Pending
+oc -ns=openshift-operators-redhat delete subs/elasticsearch-operator
+oc -ns=openshift-operators delete subs/jaeger                   
+oc -ns=openshift-operators delete subs/kiali                    
+oc -ns=openshift-operators delete subs/servicemeshoperator      
+
+
+#Durante a instalação via helm, metadata.name e metadata.namespace não foram respeitados.
+    - manter os namespaces previsamente definidos.
+    - os operators não sairam do 'pending'
+
+#helm install -f values.yaml ossm-operators --namespace=projeto-infra-ossm --create-namespace . --dry-run
+access-redhat.com /elasticsearch namespace
+
+
+Error from server (Forbidden): project.project.openshift.io "openshift-operators-redhat" is forbidden: cannot request a project starting with "openshift-"
+
+oc project openshift-operators-redhat

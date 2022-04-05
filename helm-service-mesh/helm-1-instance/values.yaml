@@ -11,5 +11,5 @@ serviceMesh:
       prometheus:
         enabled: true
     version: v2.1
-
   memberRoll:
+    namespace: projeto-infra-ossm

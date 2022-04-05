@@ -1,0 +1,50 @@
+################################################################################
+#pré requisitos
+################################################################################
+- git client
+    - clone https://github.com/jrvpontes/RedHat-proderj
+- helm client
+    - https://helm.sh/docs/intro/install/
+- oc client
+    - https://docs.openshift.com/container-platform/4.7/cli_reference/openshift_cli/getting-started-cli.html
+--------------------------------------------------------------------------------
+################################################################################
+
+################################################################################
+- Instalação via web-console
+################################################################################
+- Service mesh
+    - oc new-project projeto-infra-ossm
+    instalar service-mesh operators
+        - elastic search - provided by Red Hat
+        - jaeger - provided by CNCF
+        - kiali - provided by Red Hat
+        - service mesh - provided by Red Hat
+
+    configurar service-mesh instances
+        - control-plane
+        - member-roll
+            - sem membros
+
+- aplicações
+    - oc new-project projeto-apps
+    - oc annotate ns projeto-apps istio-injection=enabled
+    - ajustar projeto-infra-ossm >> Member Roll >> Spec >> Members [projeto-apps]
+    - oc create -f order-deploy.yaml
+    - oc create -f product-deploy.yaml
+    - oc new-app --name=sonda registry.access.redhat.com/ubi8/ubi-minimal:8.5
+
+- aplicar configurações istio:
+    - oc create -f 0_istio-gateway.yaml
+    - oc create -f 1_istio-virtual-service.yaml
+- testar pods # opcional
+- sondar projetos
+    - oc rsh pods/sonda-1-deploy /bin/bash
+        - curl order:8080/order
+        - curl product:8080/spl50
+
+
+- acessar routes
+    - ${OSSM_INGRES}/order
+    - ${OSSM_INGRES}/spl50
+        
