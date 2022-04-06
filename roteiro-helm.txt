@@ -24,11 +24,11 @@ oc new-project proderj-dss-apps
 #web-console >> Operators >> Installed Operators >> openshift-operators 
 #Linha de comando abaixo desnecessária
     #helm install -f values.yaml -n proderj-dit-infra-ossm proderj-dit-infra-ossm-operator helm-service-mesh/helm-0-operator/
-# web-console >> Networking >> proderj-dit-infra-ossm >> Routes >> Location
-# web-console >> Operators >> Installed Operators [proderj-dit-infra-ossm] >> Red Hat OpenShift Service Mesh >> All Instances
+# web-console >> Networking >> Routes >> proderj-dit-infra-ossm >> Location
+# web-console >> Operators >> Installed Operators >> proderj-dit-infra-ossm >> Red Hat OpenShift Service Mesh >> All Instances
 helm install -f values.yaml -n proderj-dit-infra-ossm proderj-dit-infra-ossm-instance helm-service-mesh/helm-1-instance/
-# web-console >> Operators >> Installed Operators [proderj-dit-infra-ossm] >> Red Hat OpenShift Service Mesh >> All Instances >> Basic >> Condittions
-# web-console >> Networking [proderj-dit-infra-ossm] >> Routes >> Location >> Kiali
+# web-console >> Operators >> Installed Operators >> proderj-dit-infra-ossm >> Red Hat OpenShift Service Mesh >> All Instances >> Basic >> Condittions
+# web-console >> Networking >> Routes >> proderj-dit-infra-ossm >> Location >> Kiali
 
 
 
@@ -38,7 +38,7 @@ oc annotate ns proderj-dss-apps istio-injection=enabled
 
 #Notificando a infra-ossm que um projeto vai ser 'observado'
 # Browser >> Kialli
-# web-console >> Operators >> Installed Operators [proderj-dit-infra-ossm] >> Red Hat OpenShift Service Mesh >> All Instances >> default >> YAML
+# web-console >> Operators >> Installed Operators >> proderj-dit-infra-ossm >> Red Hat OpenShift Service Mesh >> All Instances >> default >> YAML
 oc -n=proderj-dit-infra-ossm patch servicemeshmemberroll/default --type=merge -p '{"spec": {"members": ["proderj-dss-apps"]}}'
 # Browser >> Kialli
 
@@ -49,16 +49,14 @@ helm install -f values.yaml -n proderj-dss-apps proderj-dss-apps helm-apps/
 # Brownser >> Kiali >> 
     - Applications  >> proderj-dss-apps
     - Graph  >> proderj-dss-apps
-./ping-XXX.sh 
-    - acessando serviços 
 
-
-# web-console >> Networking [proderj-dit-infra-ossm] >> Routes >> Kiali >> Location
+# web-console >> Networking >> Routes >> proderj-dit-infra-ossm >> 
     - istio-ingressgateway
-        - adicionar: 
-            /order
-            /spl50
-            /rating
+		- executar microserviços: 
+			./ping-XXX.sh 
+				/order
+				/spl50
+				/rating
         - acessando aplicativos de observabilidade
             - kiali
             - jaeger
