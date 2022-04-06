@@ -1,0 +1,5 @@
+[ocpadmin@SRV-CICC-OSHML-02 helm]$ helm install -f values.yaml -n projeto-gefin-apps projeto-gefin-apps helm-apps/
+WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: /home/ocpadmin/openshift/install-01/auth/kubeconfig
+Error: INSTALLATION FAILED: unable to build kubernetes objects from release manifest: [unable to recognize "": no matches for kind "Gateway" in version "networking.istio.io/v1beta1", unable to recognize "": no matches for kind "VirtualService" in version "networking.istio.io/v1beta1"]
+[ocpadmin@SRV-CICC-OSHML-02 helm]$ oc project
+Using project "projeto-gefin-apps" on server "https://api.hml.proderj.rj.gov.br:6443".

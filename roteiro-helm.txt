@@ -15,10 +15,10 @@
 ################################################################################
 #local de trabalho: RedHat-proderj/helm
 #Preparando infra do OpenshiftServiceMesh - ossm
-oc new-project projeto-infra-ossm
-oc new-project projeto-gefin-apps
+oc new-project proderj-dit-infra-ossm
+oc new-project proderj-dss-apps
 
-helm install -f values.yaml -n projeto-infra-ossm projeto-infra-ossm-operator helm-service-mesh/helm-0-operator/
+#helm install -f values.yaml -n projeto-infra-ossm projeto-infra-ossm-operator helm-service-mesh/helm-0-operator/
 helm install -f values.yaml -n projeto-infra-ossm projeto-infra-ossm-instance helm-service-mesh/helm-1-instance/
 
 #Preparando projeto/namespace agrupador de aplicações. Habilitar istio: 
