@@ -49,7 +49,7 @@ helm install -f values.yaml -n proderj-dss-apps proderj-dss-apps helm-apps/
 # Brownser >> Kiali >> 
     - Applications  >> proderj-dss-apps
     - Graph  >> proderj-dss-apps
-./ping-openctl.sh 
+./ping-XXX.sh 
     - acessando serviços 
 
 
