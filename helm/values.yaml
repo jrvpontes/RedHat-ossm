@@ -1,6 +1,6 @@
 #Não esquecer de validar igualdade: values.yaml e /roterio-helm.txt
 #var_project_infra_ossm: projeto-infra-ossm
-#var_project_grupo_apps: projeto-apps
+#var_project_grupo_apps: projeto-gefin-apps
 
 openshiftServiceMesh:
   operator:
@@ -42,9 +42,3 @@ openshiftServiceMesh:
         name: default
       spec:
         members:
-
-openshiftApplications:
-  projetoInfra:
-    name: projeto-infra-ossm
-  projetoGrupo:
-    name: projeto-apps

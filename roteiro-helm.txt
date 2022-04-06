@@ -11,35 +11,40 @@
 ################################################################################
 # Não esquecer de validar igualdade: helm/values.yaml e roterio-helm.txt
 # var_project_infra_ossm: projeto-infra-ossm
-# var_project_grupo_apps: projeto-apps
+# var_project_grupo_apps: projeto-gefin-apps
 ################################################################################
-
+#local de trabalho: RedHat-proderj/helm
 #Preparando infra do OpenshiftServiceMesh - ossm
-helm install -f values.yaml ossm-operator helm-service-mesh/helm-0-operator/ 
-helm install -f values.yaml ossm-instance --namespace=projeto-infra-ossm --create-namespace helm-service-mesh/helm-1-instance/ 
+oc new-project projeto-infra-ossm
+helm install -f values.yaml projeto-infra-ossm-operator helm-service-mesh/helm-0-operator/ 
+helm install -f values.yaml projeto-infra-ossm-instance helm-service-mesh/helm-1-instance/ 
+
+#Preparando projeto/namespace agrupador de aplicações: 
+oc new-project projeto-gefin-apps
+    - habilitar istio: oc annotate ns projeto-gefin-apps istio-injection=enabled
 
 #Notificando a infra-ossm que um projeto vai ser 'observado'
-oc -n=projeto-infra-ossm patch servicemeshmemberroll/default --type=merge -p '{"spec": {"members": ["projeto-apps"]}}'
+oc -n=projeto-infra-ossm patch servicemeshmemberroll/default --type=merge -p '{"spec": {"members": ["projeto-gefin-apps"]}}'
 
-#Instalando Aplicações de exemplo: 
-helm install -f values.yaml ossm-apps --namespace=projeto-apps --create-namespace helm-apps/
-    - não respeitou a anotação: istio-injection=enabled
-    - aplicar manualmente: oc annotate ns projeto-apps istio-injection=enabled
+#Instalando as aplicações no projeto
+helm install -f values.yaml projeto-gefin-apps helm-apps/
+
+
 
 #Acessar openshift web-console >> Networking >> Routes
     - Alternar para projeto-infra-ossm
     - Acessar na coluna 'Location'
-        - acionando serviços de exemplot
+        - acionando serviços de exemplos
             - istio-ingressgateway
                 - adicionar: 
                     /order
                     /spl50
                     /rating
         - acessando aplicativos de observabilidade
-            - grafana
-            - jaeger
             - kiali
+            - jaeger
             - prometheus
+            - grafana
 
 
 
@@ -51,11 +56,15 @@ helm install -f values.yaml ossm-apps --namespace=projeto-apps --create-namespac
 ################################################################################
 ################################################################################
 # Comandos de apoio: CUIDADO
-oc delete project projeto-apps
+oc delete project projeto-gefin-apps
+
 oc delete project projeto-infra-ossm
 --------------------------------------------------------------------------------
 ################################################################################
 
+helm install -f values.yaml ossm-instance --namespace=projeto-infra-ossm --create-namespace helm-service-mesh/helm-1-instance/
+    - mesmo assim, instala do namespace default
+    - é melhor criar o projeto 'infra' antes.
 
 ################################################################################
 #comprometeu com o cluster TODO. Os operatos não saem do lugar: Pending
