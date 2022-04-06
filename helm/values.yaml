@@ -1,0 +1,50 @@
+#Não esquecer de validar igualdade: values.yaml e /roterio-helm.txt
+#var_project_infra_ossm: projeto-infra-ossm
+#var_project_grupo_apps: projeto-apps
+
+openshiftServiceMesh:
+  operator:
+    serviceMesh:
+      subscription:
+        name: servicemeshoperator
+      spec:
+        channel: stable
+        installPlanApproval: Automatic 
+        name: servicemeshoperator 
+        source: redhat-operators 
+        sourceNamespace: openshift-marketplace
+    elasticSearch:
+      subscription:
+      spec:
+    kiali:
+      subscription:
+      spec:
+    jaeger:
+      subscription:
+      spec:
+  instance:
+    serviceMeshControlPlane:
+      metadata:
+        namespace: projeto-infra-ossm
+        name: basic
+      spec:
+        addons:
+          grafana:
+            enabled: true
+          kiali:
+            enabled: true
+          prometheus:
+            enabled: true
+        version: v2.1
+    serviceMeshMemberRoll:
+      metadata:
+        namespace: projeto-infra-ossm
+        name: default
+      spec:
+        members:
+
+openshiftApplications:
+  projetoInfra:
+    name: projeto-infra-ossm
+  projetoGrupo:
+    name: projeto-apps

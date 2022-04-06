@@ -14,15 +14,17 @@
 - Instalação via web-console
 ################################################################################
 - Service mesh
-    - oc new-project projeto-infra-ossm
     instalar service-mesh operators
         - elastic search - provided by Red Hat
         - jaeger - provided by CNCF
         - kiali - provided by Red Hat
         - service mesh - provided by Red Hat
 
+    - oc new-project projeto-infra-ossm
     configurar service-mesh instances
         - control-plane
+            - é o objeto reponsável por colocar os 'pods' dos aplicativo de apoio no acessar
+                
         - member-roll
             - sem membros
 

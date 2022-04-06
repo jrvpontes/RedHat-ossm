@@ -1,0 +1,25 @@
+apiVersion: maistra.io/v2
+kind: ServiceMeshControlPlane
+metadata:
+  namespace: {{ .Values.openshiftServiceMesh.instance.serviceMeshControlPlane.metadata.namespace }} 
+  name: {{ .Values.openshiftServiceMesh.instance.serviceMeshControlPlane.metadata.name }} 
+spec:
+  tracing:
+    sampling: 10000
+    type: Jaeger
+  policy:
+    type: Istiod
+  addons:
+    grafana:
+      enabled: {{ .Values.openshiftServiceMesh.instance.serviceMeshControlPlane.spec.addons.grafana.enabled }} 
+    jaeger:
+      install:
+        storage:
+          type: Memory
+    kiali:
+      enabled: {{ .Values.openshiftServiceMesh.instance.serviceMeshControlPlane.spec.addons.kiali.enabled }} 
+    prometheus:
+      enabled: {{ .Values.openshiftServiceMesh.instance.serviceMeshControlPlane.spec.addons.prometheus.enabled }} 
+  version: {{ .Values.openshiftServiceMesh.instance.serviceMeshControlPlane.spec.version }} 
+  telemetry:
+    type: Istiod

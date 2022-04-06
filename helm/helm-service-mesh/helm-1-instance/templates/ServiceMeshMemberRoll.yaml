@@ -1,0 +1,7 @@
+apiVersion: maistra.io/v1
+kind: ServiceMeshMemberRoll
+metadata:
+  namespace: {{ .Values.openshiftServiceMesh.instance.serviceMeshControlPlane.metadata.namespace }} 
+  name: default
+spec:
+  members:

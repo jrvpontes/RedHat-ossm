@@ -1,9 +1,9 @@
 kind: Project
 apiVersion: project.openshift.io/v1
 metadata:
-  name: projeto-apps
+  name: {{ .Values.openshiftApplications.projetoGrupo.name }} 
   labels:
-    maistra.io/member-of: projeto-infra-ossm
+    maistra.io/member-of: {{ .Values.openshiftApplications.projetoInfra.name }} 
   annotations:
     istio-injection: enabled
     openshift.io/description: ''

@@ -9,17 +9,48 @@
     - https://docs.openshift.com/container-platform/4.7/cli_reference/openshift_cli/getting-started-cli.html
 --------------------------------------------------------------------------------
 ################################################################################
+# Não esquecer de validar igualdade: helm/values.yaml e roterio-helm.txt
+# var_project_infra_ossm: projeto-infra-ossm
+# var_project_grupo_apps: projeto-apps
+################################################################################
 
+#Preparando infra do OpenshiftServiceMesh - ossm
+helm install -f values.yaml ossm-operator helm-service-mesh/helm-0-operator/ 
+helm install -f values.yaml ossm-instance --namespace=projeto-infra-ossm --create-namespace helm-service-mesh/helm-1-instance/ 
 
-oc new-project projeto-infra-ossm
-helm install -f values.yaml ossm-operators . --dry-run
-helm install -f values.yaml ossm-instances . --dry-run
-helm install -f values.yaml ossm-apps --namespace=projeto-apps --create-namespace . --dry-run
+#Notificando a infra-ossm que um projeto vai ser 'observado'
+oc -n=projeto-infra-ossm patch servicemeshmemberroll/default --type=merge -p '{"spec": {"members": ["projeto-apps"]}}'
+
+#Instalando Aplicações de exemplo: 
+helm install -f values.yaml ossm-apps --namespace=projeto-apps --create-namespace helm-apps/
     - não respeitou a anotação: istio-injection=enabled
-    - aplicar manualmente: oc -ns=projeto-apps annotate istio-injection=enabled
+    - aplicar manualmente: oc annotate ns projeto-apps istio-injection=enabled
 
-oc -ns=projeto-infra-ossm patch servicemeshmemberroll/default --type=merge -p '{"spec": {"members": ["projeto-apps"]}}'
+#Acessar openshift web-console >> Networking >> Routes
+    - Alternar para projeto-infra-ossm
+    - Acessar na coluna 'Location'
+        - acionando serviços de exemplot
+            - istio-ingressgateway
+                - adicionar: 
+                    /order
+                    /spl50
+                    /rating
+        - acessando aplicativos de observabilidade
+            - grafana
+            - jaeger
+            - kiali
+            - prometheus
 
+
+
+
+#################################[fim]]#########################################
+
+
+
+################################################################################
+################################################################################
+# Comandos de apoio: CUIDADO
 oc delete project projeto-apps
 oc delete project projeto-infra-ossm
 --------------------------------------------------------------------------------
@@ -38,10 +69,5 @@ oc -ns=openshift-operators delete subs/servicemeshoperator
     - manter os namespaces previsamente definidos.
     - os operators não sairam do 'pending'
 
-#helm install -f values.yaml ossm-operators --namespace=projeto-infra-ossm --create-namespace . --dry-run
-access-redhat.com /elasticsearch namespace
-
-
-Error from server (Forbidden): project.project.openshift.io "openshift-operators-redhat" is forbidden: cannot request a project starting with "openshift-"
-
-oc project openshift-operators-redhat
+/home/jpontes/wks/Nuvem/RedHat-proderj/helm
+[jpontes@fedora helm]$ helm install -f values.yaml ossm-teste helm-apps/ --dry-run > helm-candidate.yaml 
