@@ -21,15 +21,14 @@ oc new-project projeto-gefin-apps
 helm install -f values.yaml -n projeto-infra-ossm projeto-infra-ossm-operator helm-service-mesh/helm-0-operator/
 helm install -f values.yaml -n projeto-infra-ossm projeto-infra-ossm-instance helm-service-mesh/helm-1-instance/
 
-#Preparando projeto/namespace agrupador de aplicações: 
-habilitar istio: oc annotate ns projeto-gefin-apps istio-injection=enabled
+#Preparando projeto/namespace agrupador de aplicações. Habilitar istio: 
+oc annotate ns projeto-gefin-apps istio-injection=enabled
 
 #Notificando a infra-ossm que um projeto vai ser 'observado'
 oc -n=projeto-infra-ossm patch servicemeshmemberroll/default --type=merge -p '{"spec": {"members": ["projeto-gefin-apps"]}}'
 
 #Instalando as aplicações no projeto
-helm install -f values.yaml projeto-gefin-apps helm-apps/
-
+helm install -f values.yaml -n projeto-gefin-apps projeto-gefin-apps helm-apps/
 
 
 #Acessar openshift web-console >> Networking >> Routes
@@ -51,6 +50,12 @@ helm install -f values.yaml projeto-gefin-apps helm-apps/
 
 
 #################################[fim]]#########################################
+Routes:
+    product/bv
+    product/spl50
+
+    order/order
+    order/rating
 
 
 
@@ -62,6 +67,7 @@ oc delete project projeto-gefin-apps
 oc delete project projeto-infra-ossm
 --------------------------------------------------------------------------------
 ################################################################################
+
 
 helm install -f values.yaml ossm-instance --namespace=projeto-infra-ossm --create-namespace helm-service-mesh/helm-1-instance/
     - mesmo assim, instala do namespace default
