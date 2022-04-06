@@ -1,0 +1,79 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  creationTimestamp: "2022-03-17T11:47:13Z"
+  generation: 1
+  labels:
+    operators.coreos.com/elasticsearch-operator.openshift-operators-redhat: ""
+  name: elasticsearch-operator
+  namespace: openshift-operators-redhat
+  resourceVersion: "9995889"
+  uid: 16ee6fc6-1f68-475f-b40f-057be01f55e4
+spec:
+  channel: stable
+  installPlanApproval: Automatic
+  name: elasticsearch-operator
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+  startingCSV: elasticsearch-operator.5.3.5-20
+status:
+  catalogHealth:
+  - catalogSourceRef:
+      apiVersion: operators.coreos.com/v1alpha1
+      kind: CatalogSource
+      name: certified-operators
+      namespace: openshift-marketplace
+      resourceVersion: "702171"
+      uid: 0996627b-c00d-4cf6-a668-5b5b914bfb7d
+    healthy: true
+    lastUpdated: "2022-03-17T11:47:14Z"
+  - catalogSourceRef:
+      apiVersion: operators.coreos.com/v1alpha1
+      kind: CatalogSource
+      name: community-operators
+      namespace: openshift-marketplace
+      resourceVersion: "701145"
+      uid: 65dea606-b601-4d36-9cd4-db5e1ea4529b
+    healthy: true
+    lastUpdated: "2022-03-17T11:47:14Z"
+  - catalogSourceRef:
+      apiVersion: operators.coreos.com/v1alpha1
+      kind: CatalogSource
+      name: redhat-marketplace
+      namespace: openshift-marketplace
+      resourceVersion: "700236"
+      uid: 5094d1bf-2515-41fd-8bc7-b25e4ff21ea1
+    healthy: true
+    lastUpdated: "2022-03-17T11:47:14Z"
+  - catalogSourceRef:
+      apiVersion: operators.coreos.com/v1alpha1
+      kind: CatalogSource
+      name: redhat-operators
+      namespace: openshift-marketplace
+      resourceVersion: "704371"
+      uid: 472729ea-6b20-413d-b73d-9e936f788b8d
+    healthy: true
+    lastUpdated: "2022-03-17T11:47:14Z"
+  conditions:
+  - lastTransitionTime: "2022-03-17T11:47:14Z"
+    message: all available catalogsources are healthy
+    reason: AllCatalogSourcesHealthy
+    status: "False"
+    type: CatalogSourcesUnhealthy
+  currentCSV: elasticsearch-operator.5.3.5-20
+  installPlanGeneration: 1
+  installPlanRef:
+    apiVersion: operators.coreos.com/v1alpha1
+    kind: InstallPlan
+    name: install-qtj4w
+    namespace: openshift-operators-redhat
+    resourceVersion: "704723"
+    uid: e5b18b97-872d-479c-8309-014e94df749c
+  installedCSV: elasticsearch-operator.5.3.5-20
+  installplan:
+    apiVersion: operators.coreos.com/v1alpha1
+    kind: InstallPlan
+    name: install-qtj4w
+    uuid: e5b18b97-872d-479c-8309-014e94df749c
+  lastUpdated: "2022-03-24T06:03:15Z"
+  state: AtLatestKnown
