@@ -16,12 +16,13 @@
 #local de trabalho: RedHat-proderj/helm
 #Preparando infra do OpenshiftServiceMesh - ossm
 oc new-project projeto-infra-ossm
-helm install -f values.yaml projeto-infra-ossm-operator helm-service-mesh/helm-0-operator/ 
-helm install -f values.yaml projeto-infra-ossm-instance helm-service-mesh/helm-1-instance/ 
+oc new-project projeto-gefin-apps
+
+helm install -f values.yaml -n projeto-infra-ossm projeto-infra-ossm-operator helm-service-mesh/helm-0-operator/
+helm install -f values.yaml -n projeto-infra-ossm projeto-infra-ossm-instance helm-service-mesh/helm-1-instance/
 
 #Preparando projeto/namespace agrupador de aplicações: 
-oc new-project projeto-gefin-apps
-    - habilitar istio: oc annotate ns projeto-gefin-apps istio-injection=enabled
+habilitar istio: oc annotate ns projeto-gefin-apps istio-injection=enabled
 
 #Notificando a infra-ossm que um projeto vai ser 'observado'
 oc -n=projeto-infra-ossm patch servicemeshmemberroll/default --type=merge -p '{"spec": {"members": ["projeto-gefin-apps"]}}'
