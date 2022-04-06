@@ -1,6 +1,6 @@
 #Não esquecer de validar igualdade: values.yaml e /roterio-helm.txt
-#var_project_infra_ossm: projeto-infra-ossm
-#var_project_grupo_apps: projeto-gefin-apps
+#var_project_infra_ossm: proderj-dit-infra-ossm
+#var_project_grupo_apps: proderj-dss-apps
 
 openshiftServiceMesh:
   operator:
@@ -25,7 +25,7 @@ openshiftServiceMesh:
   instance:
     serviceMeshControlPlane:
       metadata:
-        namespace: projeto-infra-ossm
+        namespace: proderj-dit-infra-ossm
         name: basic
       spec:
         addons:
@@ -38,7 +38,7 @@ openshiftServiceMesh:
         version: v2.1
     serviceMeshMemberRoll:
       metadata:
-        namespace: projeto-infra-ossm
+        namespace: proderj-dit-infra-ossm
         name: default
       spec:
         members:

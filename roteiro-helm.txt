@@ -7,47 +7,63 @@
     - https://helm.sh/docs/intro/install/
 - oc client
     - https://docs.openshift.com/container-platform/4.7/cli_reference/openshift_cli/getting-started-cli.html
+
+# Não esquecer de validar igualdade: helm/values.yaml e roteiro-helm.txt
+# var_project_infra_ossm: proderj-dit-infra-ossm
+# var_project_grupo_apps: proderj-dss-apps
 --------------------------------------------------------------------------------
 ################################################################################
-# Não esquecer de validar igualdade: helm/values.yaml e roterio-helm.txt
-# var_project_infra_ossm: projeto-infra-ossm
-# var_project_grupo_apps: projeto-gefin-apps
 ################################################################################
+--------------------------------------------------------------------------------
 #local de trabalho: RedHat-proderj/helm
 #Preparando infra do OpenshiftServiceMesh - ossm
 oc new-project proderj-dit-infra-ossm
 oc new-project proderj-dss-apps
 
-#helm install -f values.yaml -n projeto-infra-ossm projeto-infra-ossm-operator helm-service-mesh/helm-0-operator/
-helm install -f values.yaml -n projeto-infra-ossm projeto-infra-ossm-instance helm-service-mesh/helm-1-instance/
+#cluster com os operators devidamente instalados.
+#web-console >> Operators >> Installed Operators >> openshift-operators 
+#Linha de comando abaixo desnecessária
+    #helm install -f values.yaml -n proderj-dit-infra-ossm proderj-dit-infra-ossm-operator helm-service-mesh/helm-0-operator/
+# web-console >> Networking >> proderj-dit-infra-ossm >> Routes >> Location
+# web-console >> Operators >> Installed Operators [proderj-dit-infra-ossm] >> Red Hat OpenShift Service Mesh >> All Instances
+helm install -f values.yaml -n proderj-dit-infra-ossm proderj-dit-infra-ossm-instance helm-service-mesh/helm-1-instance/
+# web-console >> Operators >> Installed Operators [proderj-dit-infra-ossm] >> Red Hat OpenShift Service Mesh >> All Instances >> Basic >> Condittions
+# web-console >> Networking [proderj-dit-infra-ossm] >> Routes >> Location >> Kiali
+
+
 
 #Preparando projeto/namespace agrupador de aplicações. Habilitar istio: 
-oc annotate ns projeto-gefin-apps istio-injection=enabled
+# web-console >> Home >> Projects  >> proderj-dss-apps >> YAML
+oc annotate ns proderj-dss-apps istio-injection=enabled
 
 #Notificando a infra-ossm que um projeto vai ser 'observado'
-oc -n=projeto-infra-ossm patch servicemeshmemberroll/default --type=merge -p '{"spec": {"members": ["projeto-gefin-apps"]}}'
+# Browser >> Kialli
+# web-console >> Operators >> Installed Operators [proderj-dit-infra-ossm] >> Red Hat OpenShift Service Mesh >> All Instances >> default >> YAML
+oc -n=proderj-dit-infra-ossm patch servicemeshmemberroll/default --type=merge -p '{"spec": {"members": ["proderj-dss-apps"]}}'
+# Browser >> Kialli
 
 #Instalando as aplicações no projeto
-helm install -f values.yaml -n projeto-gefin-apps projeto-gefin-apps helm-apps/
+# web-console >> Workloads >> Pods >> proderj-dss-apps 
+helm install -f values.yaml -n proderj-dss-apps proderj-dss-apps helm-apps/
+# web-console >> Workload >> Pods >> proderj-dss-apps  >> order-xyz >> Containers
+# Brownser >> Kiali >> 
+    - Applications  >> proderj-dss-apps
+    - Graph  >> proderj-dss-apps
+./ping-openctl.sh 
+    - acessando serviços 
 
 
-#Acessar openshift web-console >> Networking >> Routes
-    - Alternar para projeto-infra-ossm
-    - Acessar na coluna 'Location'
-        - acionando serviços de exemplos
-            - istio-ingressgateway
-                - adicionar: 
-                    /order
-                    /spl50
-                    /rating
+# web-console >> Networking [proderj-dit-infra-ossm] >> Routes >> Kiali >> Location
+    - istio-ingressgateway
+        - adicionar: 
+            /order
+            /spl50
+            /rating
         - acessando aplicativos de observabilidade
             - kiali
             - jaeger
             - prometheus
             - grafana
-
-
-
 
 #################################[fim]]#########################################
 Routes:
@@ -62,14 +78,14 @@ Routes:
 ################################################################################
 ################################################################################
 # Comandos de apoio: CUIDADO
-oc delete project projeto-gefin-apps
+oc delete project proderj-dss-apps
 
-oc delete project projeto-infra-ossm
+oc delete project proderj-dit-infra-ossm
 --------------------------------------------------------------------------------
 ################################################################################
 
 
-helm install -f values.yaml ossm-instance --namespace=projeto-infra-ossm --create-namespace helm-service-mesh/helm-1-instance/
+helm install -f values.yaml ossm-instance --namespace=proderj-dit-infra-ossm --create-namespace helm-service-mesh/helm-1-instance/
     - mesmo assim, instala do namespace default
     - é melhor criar o projeto 'infra' antes.
 

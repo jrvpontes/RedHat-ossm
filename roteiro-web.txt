@@ -20,7 +20,7 @@
         - kiali - provided by Red Hat
         - service mesh - provided by Red Hat
 
-    - oc new-project projeto-infra-ossm
+    - oc new-project proderj-dit-infra-ossm
     configurar service-mesh instances
         - control-plane
             - é o objeto reponsável por colocar os 'pods' dos aplicativo de apoio no acessar
@@ -29,9 +29,9 @@
             - sem membros
 
 - aplicações
-    - oc new-project projeto-apps
-    - oc annotate ns projeto-apps istio-injection=enabled
-    - ajustar projeto-infra-ossm >> Member Roll >> Spec >> Members [projeto-apps]
+    - oc new-project proderj-dss-apps
+    - oc annotate ns proderj-dss-apps istio-injection=enabled
+    - ajustar proderj-dit-infra-ossm >> Member Roll >> Spec >> Members [proderj-dss-apps]
     - oc create -f order-deploy.yaml
     - oc create -f product-deploy.yaml
     - oc new-app --name=sonda registry.access.redhat.com/ubi8/ubi-minimal:8.5
