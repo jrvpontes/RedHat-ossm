@@ -1,0 +1,12 @@
+oc new-project proderj-dit-infra-ossm
+oc new-project proderj-dss-apps
+helm install -f values.yaml -n proderj-dit-infra-ossm proderj-dit-infra-ossm-instance helm-service-mesh/helm-1-instance/
+oc annotate ns proderj-dss-apps istio-injection=enabled
+oc -n=proderj-dit-infra-ossm patch servicemeshmemberroll/default --type=merge -p '{"spec": {"members": ["proderj-dss-apps"]}}'
+helm install -f values.yaml -n proderj-dss-apps proderj-dss-apps helm-apps/
+
+
+
+
+oc delete project proderj-dss-apps
+oc delete project proderj-dit-infra-ossm
